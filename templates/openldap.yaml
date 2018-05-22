@@ -4,7 +4,7 @@ metadata:
   name: {{.Release.Name}}-seedusers
 data:
   seedusers.ldif: |
-{{- include (print .Template.BasePath "/_seedusers2.ldif.tpl") . | indent 4 }}  
+{{- include (print .Template.BasePath "/_seedusers2.ldif.tpl") . | indent 4 }}
 ---
 apiVersion: v1
 kind: Service
@@ -54,6 +54,13 @@ spec:
               value: "{{.Values.OpenLdap.AdminPassword}}"
             - name: LDAP_REMOVE_CONFIG_AFTER_SETUP
               value: "false"
+      nodeSelector:
+        role: master
+      schedulerName: default-scheduler
+      tolerations:
+        - effect: NoSchedule
+          key: dedicated
+          operator: Exists
       volumes:
         - name: ldap-certs
           hostPath:
@@ -61,4 +68,3 @@ spec:
         - name: {{.Release.Name}}-seedusers
           configMap:
             name: {{.Release.Name}}-seedusers
-

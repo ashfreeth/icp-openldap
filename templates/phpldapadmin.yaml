@@ -36,3 +36,10 @@ spec:
           value: "{{.Values.OpenLdap.Https}}"
         - name: PHPLDAPADMIN_LDAP_HOSTS
           value: "{{.Values.PhpLdapAdmin.LdapEndpoint | default .Release.Name}}"
+      nodeSelector:
+        role: master
+      schedulerName: default-scheduler
+      tolerations:
+        - effect: NoSchedule
+          key: dedicated
+          operator: Exists
