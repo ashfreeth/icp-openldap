@@ -40,6 +40,8 @@ spec:
               mountPath: /container/service/slapd/assets/certs
             - name: {{.Release.Name}}-seedusers
               mountPath: /container/service/slapd/assets/config/bootstrap/ldif/custom
+            - name: {{.Release.Name}}-seedusers-tmp
+              mountPath: /tmp/seedusers
           ports:
             - containerPort: 389
             - containerPort: 636
@@ -66,5 +68,8 @@ spec:
           hostPath:
             path: "/data/ldap/certs"
         - name: {{.Release.Name}}-seedusers
+          emptyDir:
+        - name: {{.Release.Name}}-seedusers-tmp
           configMap:
             name: {{.Release.Name}}-seedusers
+            defaultMode: 420
